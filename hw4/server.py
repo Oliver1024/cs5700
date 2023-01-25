@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 def get_title(url):
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0;Win64) AppleWebkit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36'}
+    headers = {'User-Agent': 'Chrome/109'}
     page = requests.get(url, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
     title = soup.find('h1').get_text()
