@@ -1,7 +1,6 @@
-import socket
+from socket import *
 import sys
 
-# Retrieve the server IP address, port number, and file name from command line arguments
 if len(sys.argv) < 4:
     print("Please provide the server IP address, port number, and file name.")
     sys.exit(1)
@@ -15,11 +14,11 @@ except ValueError:
 file_name = sys.argv[3]
 
 # Create a socket and connect to the server
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+with socket(AF_INET, SOCK_STREAM) as s:
     try:
         s.connect((HOST, PORT))
         print("Connection Successful!")
-    except (ConnectionRefusedError, socket.gaierror):
+    except (ConnectionRefusedError, gaierror):
         print("Error while connecting!")
         sys.exit(1)
 
@@ -30,16 +29,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # Receive the server's response
     response = s.recv(1024).decode()
 
-    # If the response contains a not found error, print an error message and exit
     if "HTTP/1.1 404 Not Found\r\n" in response:
+        print("\r\n")
         print("---------------HTTP RESPONSE---------------")
-        print("HTTP/1.1 404 Not Found")
+        print(response.split('\r\n')[0])
         print("---------------END OF HTTP RESPONSE---------------")
         sys.exit(1)
-    # If the response contains a success message, print it
     if "HTTP/1.1 200 OK\r\n" in response:
+        # Split the response into headers and body
+        headers, body = response.split("\r\n\r\n", 1)
+        print("\r\n")
+        # headers = headers.split('\r\n')
+        # headers = [h for h in headers if not h.startswith('Content-Length') and not h.startswith('Connection Successful!')]
         print("---------------HTTP RESPONSE---------------")
-        print("HTTP/1.1 200 OK")
-        file_content = response.split("\r\n\r\n")[1]
-        print(file_content.strip())
+        # print('\r\n'.join(headers))
+        print(response.split('\r\n')[0])
+        print("\r\n")
+        print(body.strip())
         print("---------------END OF HTTP RESPONSE---------------")
