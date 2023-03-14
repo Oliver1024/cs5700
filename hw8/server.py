@@ -1,3 +1,5 @@
+# Kejian Tong
+
 from socket import *
 import sys
 
@@ -11,7 +13,7 @@ try:
 except ValueError:
     sys.exit(1)
 
-HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
+HOST = gethostbyname(gethostname())
 
 print(f"Server IP address: {HOST}")
 print(f"Server port number: {PORT}")
