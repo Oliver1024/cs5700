@@ -15,8 +15,9 @@ except ValueError:
 
 HOST = gethostbyname(gethostname())
 
-print(f"Server IP address: {HOST}")
-print(f"Server port number: {PORT}")
+print(f"Server IP address: {HOST}\r\n")
+print(f"Server port number: {PORT}\r\n\r\n")
+print("Ready to server...")
 
 # Create a socket and bind it to the specified port
 with socket(AF_INET, SOCK_STREAM) as s:
