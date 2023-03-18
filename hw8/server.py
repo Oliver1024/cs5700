@@ -29,24 +29,13 @@ with socket(AF_INET, SOCK_STREAM) as s:
     while True:
         # Accept a new connection
         conn, addr = s.accept()
-
         with conn:
-            print(f"Connected by {addr}")
-
             # Receive the client's request
             data = conn.recv(1024)
-
-            # Parse the request to get the requested file name
-            request = data.decode()
-            file_name = request.split()[1][1:]
-
-            try:
-                with open(file_name, "rb") as f:
-                    file_contents = f.read()
-                response = f"HTTP/1.1 200 OK\r\nConnection Successful!: {len(file_contents)}\r\n\r\n"
-                response += file_contents.decode()
-                conn.sendall(response.encode())
-
-            except FileNotFoundError:
-                response = "HTTP/1.1 404 Not Found\r\nConnection Successful!\r\n\r\n"
-                conn.sendall(response.encode())
+            if data:
+                file_name = data.decode()
+                try:
+                    with open(file_name, 'rb') as content:
+                        conn.sendall("HTTP/1.1 200 OK \n\n".encode() + content.read())
+                except:
+                    conn.sendall("HTTP/1.1 404 Not Found".encode())
